@@ -1,1 +1,1 @@
-# test-gitops
+# test-gitops-init
