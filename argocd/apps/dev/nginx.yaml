@@ -5,6 +5,7 @@ metadata:
 spec:
   project: default
   source:
+    repoURL: git@github.com:kozuchowski/test-gitops.git
     path: apps/nginx/overlays/dev
     targetRevision: HEAD
   destination:
