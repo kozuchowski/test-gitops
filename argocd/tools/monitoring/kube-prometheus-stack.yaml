@@ -4,6 +4,9 @@ metadata:
   name: kube-prometheus-stack
 spec:
   project: default
+  destination:
+    namespace: monitoring
+    name: in-cluster
   source:
     repoURL: git@github.com:kozuchowski/test-gitops.git
     path: tools/monitoring/kube-prometheus-stack
