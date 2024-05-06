@@ -4,9 +4,6 @@ metadata:
   name: kube-prometheus-stack
 spec:
   project: default
-  destination:
-    namespace: monitoring
-    name: in-cluster
   source:
     repoURL: git@github.com:kozuchowski/test-gitops.git
     path: tools/monitoring/kube-prometheus-stack
@@ -15,7 +12,7 @@ spec:
         - values.dev.yaml
   destination:
     server: https://kubernetes.default.svc
-    namespace: default
+    namespace: monitoring
   syncPolicy:
     automated:
       prune: true
