@@ -280,7 +280,7 @@ loki:
     tracing:
       enabled: {{ .Values.loki.tracing.enabled }}
   # Should authentication be enabled
-  auth_enabled: false
+  auth_enabled: true
   # -- memberlist configuration (overrides embedded default)
   memberlistConfig: {}
   # -- Extra memberlist configuration
@@ -310,84 +310,61 @@ loki:
     compactor_address: '{{ include "loki.compactorAddress" . }}'
   # -- Storage config. Providing this will automatically populate all necessary storage configs in the templated config.
   storage:
-    type: 'filesystem'
+    # Loki requires a bucket for chunks and the ruler. GEL requires a third bucket for the admin API.
+    # Please provide these values if you are using object storage.
+    # bucketNames:
+    #   chunks: FIXME
+    #   ruler: FIXME
+    #   admin: FIXME
+    type: s3
+    s3:
+      s3: null
+      endpoint: null
+      region: null
+      secretAccessKey: null
+      accessKeyId: null
+      signatureVersion: null
+      s3ForcePathStyle: false
+      insecure: false
+      http_config: {}
+      # -- Check https://grafana.com/docs/loki/latest/configure/#s3_storage_config for more info on how to provide a backoff_config
+      backoff_config: {}
+    gcs:
+      chunkBufferSize: 0
+      requestTimeout: "0s"
+      enableHttp2: true
+    azure:
+      accountName: null
+      accountKey: null
+      connectionString: null
+      useManagedIdentity: false
+      useFederatedToken: false
+      userAssignedId: null
+      requestTimeout: null
+      endpointSuffix: null
+    swift:
+      auth_version: null
+      auth_url: null
+      internal: null
+      username: null
+      user_domain_name: null
+      user_domain_id: null
+      user_id: null
+      password: null
+      domain_id: null
+      domain_name: null
+      project_id: null
+      project_name: null
+      project_domain_id: null
+      project_domain_name: null
+      region_name: null
+      container_name: null
+      max_retries: null
+      connect_timeout: null
+      request_timeout: null
     filesystem:
-      chunks_directory: '/var/loki/chunks'
-      rules_directory: '/var/loki/rules'
-  schemaConfig:
-    configs:
-    - from: 2024-01-01
-      store: tsdb
-      index:
-        prefix: loki_index_
-        period: 24h
-      object_store: filesystem # we're storing on filesystem so there's no real persistence here.
-      schema: v13
-singleBinary:
-  replicas: 1
-read:
-  replicas: 0
-backend:
-  replicas: 0
-write:
-  replicas: 0
-  # -- Storage config. Providing this will automatically populate all necessary storage configs in the templated config.
-  # storage:
-  #   # Loki requires a bucket for chunks and the ruler. GEL requires a third bucket for the admin API.
-  #   # Please provide these values if you are using object storage.
-  #   # bucketNames:
-  #   #   chunks: FIXME
-  #   #   ruler: FIXME
-  #   #   admin: FIXME
-  #   type: s3
-  #   s3:
-  #     s3: null
-  #     endpoint: null
-  #     region: null
-  #     secretAccessKey: null
-  #     accessKeyId: null
-  #     signatureVersion: null
-  #     s3ForcePathStyle: false
-  #     insecure: false
-  #     http_config: {}
-  #     # -- Check https://grafana.com/docs/loki/latest/configure/#s3_storage_config for more info on how to provide a backoff_config
-  #     backoff_config: {}
-  #   gcs:
-  #     chunkBufferSize: 0
-  #     requestTimeout: "0s"
-  #     enableHttp2: true
-  #   azure:
-  #     accountName: null
-  #     accountKey: null
-  #     connectionString: null
-  #     useManagedIdentity: false
-  #     useFederatedToken: false
-  #     userAssignedId: null
-  #     requestTimeout: null
-  #     endpointSuffix: null
-  #   swift:
-  #     auth_version: null
-  #     auth_url: null
-  #     internal: null
-  #     username: null
-  #     user_domain_name: null
-  #     user_domain_id: null
-  #     user_id: null
-  #     password: null
-  #     domain_id: null
-  #     domain_name: null
-  #     project_id: null
-  #     project_name: null
-  #     project_domain_id: null
-  #     project_domain_name: null
-  #     region_name: null
-  #     container_name: null
-  #     max_retries: null
-  #     connect_timeout: null
-  #     request_timeout: null
-  #   filesystem:
-  #     chunks_directory: /var/loki/chunks
-  #     rules_directory: /var/loki/rules
+      chunks_directory: /var/loki/chunks
+      rules_directory: /var/loki/rules
   # -- Configure memcached as an external cache for chunk and results cache. Disabled by default
   # must enable and specify a host for each cache you would like to use.
   memcached:
@@ -404,22 +381,7 @@ write:
       timeout: "500ms"
       default_validity: "12h"
   # -- Check https://grafana.com/docs/loki/latest/configuration/#schema_config for more info on how to configure schemas
-  schemaConfig: 
-      configs:
-        - from: 2024-04-29
-          store: tsdb
-          object_store: '{{ .Values.loki.storage.type }}'
-          schema: v12
-          index:
-            prefix: loki_pre_v3_index_
-            period: 24h
-        - from: 2024-05-06
-          store: tsdb
-          object_store: '{{ .Values.loki.storage.type }}'
-          schema: v13
-          index:
-            prefix: loki_v3_index_
-            period: 24h
+  schemaConfig: {}
   # -- a real Loki install requires a proper schemaConfig defined above this, however for testing or playing around
   # you can enable useTestSchema
   useTestSchema: false
