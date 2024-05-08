@@ -27,7 +27,7 @@ imagePullSecrets: []
 # - SingleBinary<->SimpleScalable: Migrate from SingleBinary to SimpleScalable (or vice versa)
 # - SimpleScalable<->Distributed: Migrate from SimpleScalable to Distributed (or vice versa)
 # Note: SimpleScalable and Distributed REQUIRE the use of object storage.
-deploymentMode: SingleBinary
+deploymentMode: SimpleScalable
 ######################################################################################################################
 #
 # Base Loki Configs including kubernetes configurations and configurations for Loki itself,
@@ -280,7 +280,7 @@ loki:
     tracing:
       enabled: {{ .Values.loki.tracing.enabled }}
   # Should authentication be enabled
-  auth_enabled: true
+  auth_enabled: false
   # -- memberlist configuration (overrides embedded default)
   memberlistConfig: {}
   # -- Extra memberlist configuration
@@ -305,7 +305,10 @@ loki:
   runtimeConfig: {}
   # -- Check https://grafana.com/docs/loki/latest/configuration/#common_config for more info on how to provide a common configuration
   commonConfig:
-    replication_factor: 1
+    path_prefix: /var/loki
+    replication_factor: 3
+    compactor_address: '{{ include "loki.compactorAddress" . }}'
+  # -- Storage config. Providing this will automatically populate all necessary storage configs in the templated config.
   storage:
     type: 'filesystem'
     filesystem:
@@ -401,7 +404,22 @@ write:
       timeout: "500ms"
       default_validity: "12h"
   # -- Check https://grafana.com/docs/loki/latest/configuration/#schema_config for more info on how to configure schemas
-  schemaConfig: {}
+  schemaConfig: 
+      configs:
+        - from: 2024-04-29
+          store: tsdb
+          object_store: '{{ .Values.loki.storage.type }}'
+          schema: v12
+          index:
+            prefix: loki_pre_v3_index_
+            period: 24h
+        - from: 2024-05-06
+          store: tsdb
+          object_store: '{{ .Values.loki.storage.type }}'
+          schema: v13
+          index:
+            prefix: loki_v3_index_
+            period: 24h
   # -- a real Loki install requires a proper schemaConfig defined above this, however for testing or playing around
   # you can enable useTestSchema
   useTestSchema: false
