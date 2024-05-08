@@ -326,62 +326,62 @@ backend:
 write:
   replicas: 0
   # -- Storage config. Providing this will automatically populate all necessary storage configs in the templated config.
-  storage:
-    # Loki requires a bucket for chunks and the ruler. GEL requires a third bucket for the admin API.
-    # Please provide these values if you are using object storage.
-    # bucketNames:
-    #   chunks: FIXME
-    #   ruler: FIXME
-    #   admin: FIXME
-    type: s3
-    s3:
-      s3: null
-      endpoint: null
-      region: null
-      secretAccessKey: null
-      accessKeyId: null
-      signatureVersion: null
-      s3ForcePathStyle: false
-      insecure: false
-      http_config: {}
-      # -- Check https://grafana.com/docs/loki/latest/configure/#s3_storage_config for more info on how to provide a backoff_config
-      backoff_config: {}
-    gcs:
-      chunkBufferSize: 0
-      requestTimeout: "0s"
-      enableHttp2: true
-    azure:
-      accountName: null
-      accountKey: null
-      connectionString: null
-      useManagedIdentity: false
-      useFederatedToken: false
-      userAssignedId: null
-      requestTimeout: null
-      endpointSuffix: null
-    swift:
-      auth_version: null
-      auth_url: null
-      internal: null
-      username: null
-      user_domain_name: null
-      user_domain_id: null
-      user_id: null
-      password: null
-      domain_id: null
-      domain_name: null
-      project_id: null
-      project_name: null
-      project_domain_id: null
-      project_domain_name: null
-      region_name: null
-      container_name: null
-      max_retries: null
-      connect_timeout: null
-      request_timeout: null
-    filesystem:
-      chunks_directory: /var/loki/chunks
-      rules_directory: /var/loki/rules
+  # storage:
+  #   # Loki requires a bucket for chunks and the ruler. GEL requires a third bucket for the admin API.
+  #   # Please provide these values if you are using object storage.
+  #   # bucketNames:
+  #   #   chunks: FIXME
+  #   #   ruler: FIXME
+  #   #   admin: FIXME
+  #   type: s3
+  #   s3:
+  #     s3: null
+  #     endpoint: null
+  #     region: null
+  #     secretAccessKey: null
+  #     accessKeyId: null
+  #     signatureVersion: null
+  #     s3ForcePathStyle: false
+  #     insecure: false
+  #     http_config: {}
+  #     # -- Check https://grafana.com/docs/loki/latest/configure/#s3_storage_config for more info on how to provide a backoff_config
+  #     backoff_config: {}
+  #   gcs:
+  #     chunkBufferSize: 0
+  #     requestTimeout: "0s"
+  #     enableHttp2: true
+  #   azure:
+  #     accountName: null
+  #     accountKey: null
+  #     connectionString: null
+  #     useManagedIdentity: false
+  #     useFederatedToken: false
+  #     userAssignedId: null
+  #     requestTimeout: null
+  #     endpointSuffix: null
+  #   swift:
+  #     auth_version: null
+  #     auth_url: null
+  #     internal: null
+  #     username: null
+  #     user_domain_name: null
+  #     user_domain_id: null
+  #     user_id: null
+  #     password: null
+  #     domain_id: null
+  #     domain_name: null
+  #     project_id: null
+  #     project_name: null
+  #     project_domain_id: null
+  #     project_domain_name: null
+  #     region_name: null
+  #     container_name: null
+  #     max_retries: null
+  #     connect_timeout: null
+  #     request_timeout: null
+  #   filesystem:
+  #     chunks_directory: /var/loki/chunks
+  #     rules_directory: /var/loki/rules
   # -- Configure memcached as an external cache for chunk and results cache. Disabled by default
   # must enable and specify a host for each cache you would like to use.
   memcached:
