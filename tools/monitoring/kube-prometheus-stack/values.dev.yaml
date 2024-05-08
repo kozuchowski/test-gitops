@@ -265,7 +265,7 @@ alertmanager:
 
   ## Deploy alertmanager
   ##
-  enabled: false
+  enabled: true
 
   ## Annotations for Alertmanager
   ##
@@ -603,7 +603,7 @@ alertmanager:
 
     ## enableHttp2: Whether to enable HTTP2.
     ## See https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api.md#endpoint
-    enableHttp2: false
+    enableHttp2: true
 
     ## tlsConfig: TLS configuration to use when scraping the endpoint. For example if using istio mTLS.
     ## Of type: https://github.com/coreos/prometheus-operator/blob/main/Documentation/api.md#tlsconfig
@@ -733,7 +733,7 @@ alertmanager:
 
     ## Define Log Format
     # Use logfmt (default) or json logging
-    logFormat: json
+    logFormat: logfmt
 
     ## Log level for Alertmanager to be configured with.
     ##
@@ -790,13 +790,9 @@ alertmanager:
     ## Define resources requests and limits for single Pods.
     ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
     ##
-    resources:
-      limits:
-        memory: 256Mi
-        cpu: 100m
-      requests:
-        memory: 64Mi
-        cpu: 10m
+    resources: {}
+    # requests:
+    #   memory: 400Mi
 
     ## Pod anti-affinity can prevent the scheduler from placing Prometheus replicas on the same node.
     ## The default value "soft" means that the scheduler should *prefer* to not schedule two replica pods onto the same node but no guarantee is provided.
@@ -1547,7 +1543,7 @@ kubeControllerManager:
 ## Component scraping coreDns. Use either this or kubeDns
 ##
 coreDns:
-  enabled: false
+  enabled: true
   service:
     enabled: true
     port: 9153
@@ -1625,7 +1621,7 @@ coreDns:
 ## Component scraping kubeDns. Use either this or coreDns
 ##
 kubeDns:
-  enabled: true
+  enabled: false
   service:
     dnsmasq:
       port: 10054
@@ -2837,13 +2833,13 @@ prometheusOperator:
     enableProbe: false
 
     # resource config for prometheusConfigReloader
-    resources:
-      requests:
-        cpu: 200m
-        memory: 50Mi
-      limits:
-        cpu: 200m
-        memory: 50Mi
+    resources: {}
+      # requests:
+      #   cpu: 200m
+      #   memory: 50Mi
+      # limits:
+      #   cpu: 200m
+      #   memory: 50Mi
 
   ## Thanos side-car image when configured
   ##
@@ -3459,7 +3455,7 @@ prometheus:
 
     ## enable --web.enable-remote-write-receiver flag on prometheus-server
     ##
-    enableRemoteWriteReceiver: true # change for receive remote metric from k6
+    enableRemoteWriteReceiver: false
 
     ## Name of the external label used to denote replica name
     ##
@@ -3539,7 +3535,7 @@ prometheus:
     ## prometheus resource to be created with selectors based on values in the helm deployment,
     ## which will also match the servicemonitors created
     ##
-    serviceMonitorSelectorNilUsesHelmValues: false
+    serviceMonitorSelectorNilUsesHelmValues: true
 
     ## ServiceMonitors to be selected for target discovery.
     ## If {}, select all ServiceMonitors
@@ -3562,7 +3558,7 @@ prometheus:
     ## prometheus resource to be created with selectors based on values in the helm deployment,
     ## which will also match the podmonitors created
     ##
-    podMonitorSelectorNilUsesHelmValues: false
+    podMonitorSelectorNilUsesHelmValues: true
 
     ## PodMonitors to be selected for target discovery.
     ## If {}, select all PodMonitors
@@ -3684,7 +3680,7 @@ prometheus:
     ## The default value "soft" means that the scheduler should *prefer* to not schedule two replica pods onto the same node but no guarantee is provided.
     ## The value "hard" means that the scheduler is *required* to not schedule two replica pods onto the same node.
     ## The value "" will disable pod anti-affinity so that no anti-affinity rules will be configured.
-    podAntiAffinity: "soft"
+    podAntiAffinity: ""
 
     ## If anti-affinity is enabled sets the topologyKey to use for anti-affinity.
     ## This can be changed to, for example, failure-domain.beta.kubernetes.io/zone
@@ -3731,16 +3727,16 @@ prometheus:
     ## Prometheus StorageSpec for persistent data
     ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/user-guides/storage.md
     ##
-    storageSpec:
-      # Using PersistentVolumeClaim
-      #
-      volumeClaimTemplate:
-        spec:
-          storageClassName: standard-rwo
-          accessModes: ["ReadWriteOnce"]
-          resources:
-            requests:
-              storage: 100Gi
+    storageSpec: {}
+    ## Using PersistentVolumeClaim
+    ##
+    #  volumeClaimTemplate:
+    #    spec:
+    #      storageClassName: gluster
+    #      accessModes: ["ReadWriteOnce"]
+    #      resources:
+    #        requests:
+    #          storage: 50Gi
     #    selector: {}
 
     ## Using tmpfs volume
