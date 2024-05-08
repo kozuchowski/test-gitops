@@ -36,6 +36,7 @@ deploymentMode: SingleBinary
 ######################################################################################################################
 # -- Configuration for running Loki
 # @default -- See values.yaml
+mode: SingleBinary
 loki:
   commonConfig:
     replication_factor: 1
