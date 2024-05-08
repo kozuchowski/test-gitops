@@ -27,7 +27,7 @@ imagePullSecrets: []
 # - SingleBinary<->SimpleScalable: Migrate from SingleBinary to SimpleScalable (or vice versa)
 # - SimpleScalable<->Distributed: Migrate from SimpleScalable to Distributed (or vice versa)
 # Note: SimpleScalable and Distributed REQUIRE the use of object storage.
-deploymentMode: SimpleScalable
+deploymentMode: SingleBinary
 ######################################################################################################################
 #
 # Base Loki Configs including kubernetes configurations and configurations for Loki itself,
@@ -37,6 +37,31 @@ deploymentMode: SimpleScalable
 # -- Configuration for running Loki
 # @default -- See values.yaml
 loki:
+  commonConfig:
+    replication_factor: 1
+  storage:
+    type: 'filesystem'
+  schemaConfig:
+    configs:
+    - from: 2024-01-01
+      store: tsdb
+      index:
+        prefix: loki_index_
+        period: 24h
+      object_store: filesystem
+      schema: v13
+
+singleBinary:
+  replicas: 1
+
+read:
+  replicas: 0
+
+backend:
+  replicas: 0
+
+write:
+  replicas: 0
   # Configures the readiness probe for all of the Loki pods
   readinessProbe:
     httpGet:
