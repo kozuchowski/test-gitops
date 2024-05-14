@@ -1106,7 +1106,14 @@ grafana:
 
   ## Configure additional grafana datasources (passed through tpl)
   ## ref: http://docs.grafana.org/administration/provisioning/#datasources
-  additionalDataSources: []
+  additionalDataSources:
+  - name: Loki
+    type: loki
+    access: proxy
+    url: http://localhost:3100
+    jsonData:
+      timeout: 60
+      maxLines: 1000
   # - name: prometheus-sample
   #   access: proxy
   #   basicAuth: true
