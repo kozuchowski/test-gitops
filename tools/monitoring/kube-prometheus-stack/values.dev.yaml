@@ -1110,7 +1110,7 @@ grafana:
   - name: Loki
     type: loki
     access: proxy
-    url: http://loki-gateway:3100
+    url: http://loki-gateway:80
     jsonData:
       timeout: 60
       maxLines: 1000
